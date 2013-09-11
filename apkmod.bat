@@ -69,10 +69,10 @@ goto restart
 :cleanp
 echo 1. Clean This Project's Folder
 echo 2. Clean All APK's in Modding Folder
-echo 5. Clean All APK's in Signing Folder
-echo 6. Clean All Projects
-echo 7. Clean All Folders/Files
-echo 8. Go Back To Main Menu
+echo 3. Clean All APK's in Signing Folder
+echo 4. Clean All Projects
+echo 5. Clean All Folders/Files
+echo 6. Go Back To Main Menu
 SET /P menuna=Please make your decision:
 echo Clearing Directories
 IF %menuna%==1 (
@@ -86,11 +86,11 @@ rmdir /S /Q %userprofile%\APKtool > nul
 rmdir /S /Q place-APK-here-for-modding > nul
 mkdir place-APK-here-for-modding
 )
-IF %menuna%==5 (
+IF %menuna%==3 (
 rmdir /S /Q place-APK-here-for-signing > nul
 mkdir place-APK-here-for-signing
 )
-IF %menuna%==7 (
+IF %menuna%==5 (
 rmdir /S /Q %userprofile%\APKtool > nul
 rmdir /S /Q projects\%capp% > nul
 mkdir projects\%capp%
@@ -102,7 +102,7 @@ rmdir /S /Q %userprofile%\APKtool > nul
 rmdir /S /Q projects > nul
 mkdir projects
 )
-IF %menuna%==6 (
+IF %menuna%==4 (
 rmdir /S /Q %userprofile%\APKtool > nul
 rmdir /S /Q projects > nul
 mkdir projects
@@ -165,7 +165,7 @@ rem goto restart
 IF NOT EXIST "%~dp0projects\%capp%" GOTO dirnada
 cls
 echo 1    System APK (Retains signature)
-echo 2    Regular APK (Removes signature for re-signing)
+echo 2    Regular APK (Removes the signature for re-signing)
 SET /P menunr=Please make your decision: 
 IF %menunr%==1 (goto sys1)
 IF %menunr%==2 (goto oa1)
@@ -262,15 +262,6 @@ goto restart
 :noproj
 PAUSE
 goto restart
-:ap
-echo Where do you want adb to pull the APK from? 
-echo Example of input : /system/app/launcher.APK
-set /P INPUT=Type input: %=%
-echo Pulling APK
-adb pull %INPUT% "%~dp0place-APK-here-for-modding\something.APK"
-if errorlevel 1 (
-PAUSE
-goto restart
 )
 :renameagain
 echo What filename would you like this app to be stored as ?
@@ -319,7 +310,7 @@ goto restart
 IF NOT EXIST "%~dp0projects\%capp%" GOTO dirnada
 cls
 echo 1    System APK (Retains signature)
-echo 2    Regular APK (Removes signature for re-signing)
+echo 2    Regular APK (Removes the signature for re-signing)
 SET /P menunr=Please make your decision: 
 IF %menunr%==1 (goto sys)
 IF %menunr%==2 (goto oa)
