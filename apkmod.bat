@@ -69,8 +69,6 @@ goto restart
 :cleanp
 echo 1. Clean This Project's Folder
 echo 2. Clean All APK's in Modding Folder
-echo 3. Clean All OGG's in OGG Folder
-echo 4. Clean All APK's in Optimize Folder
 echo 5. Clean All APK's in Signing Folder
 echo 6. Clean All Projects
 echo 7. Clean All Folders/Files
