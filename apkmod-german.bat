@@ -27,7 +27,7 @@ echo.
 echo APK Mod ^| Current Project: %capp% ^| 2013
 echo.
 echo.
-echo Simple Tasks:
+echo Normale Aufgaben:
 echo.
 echo 1 Coming Soon
 echo 2 Extract APK
