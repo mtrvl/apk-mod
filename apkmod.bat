@@ -3,16 +3,11 @@ setlocal enabledelayedexpansion
 COLOR 07
 if (%1)==(0) goto skipme
 if (%1) neq () goto adbi
-echo -------------------------------------------------------------------------- >> log.txt
-echo ^|%date% -- %time%^| >> log.txt
-echo -------------------------------------------------------------------------- >> log.txt
-Script 0 2>> log.txt
 :skipme
 mode con:cols=81 lines=40
 :skipme
 set usrc=9
 set capp=None
-set heapy=64
 java -version 
 if errorlevel 1 goto errjava
 adb version 
@@ -54,23 +49,18 @@ echo.
 SET /P menunr=Make Your Decision:
 IF %menunr%==1 (goto restart)
 IF %menunr%==10 (goto filesel)
-IF %menunr%==17 (goto about)
-IF %menunr%==18 (goto gplus)
-IF %menunr%==15 (goto cleanp)
+IF %menunr%==12 (goto gplus)
+IF %menunr%==9 (goto cleanp)
 if %capp%==None goto noproj
 IF %menunr%==2 (goto ex)
-IF %menunr%==2 (goto opt)
 IF %menunr%==3 (goto zip)
 IF %menunr%==4 (goto si)
 IF %menunr%==5 (goto zipa)
 IF %menunr%==6 (goto ins)
 IF %menunr%==7 (goto alli)
 IF %menunr%==8 (goto apu)
-IF %menunr%==11 (goto co)
-IF %menunr%==12 (goto si)
-IF %menunr%==13 (goto ins)
-IF %menunr%==14 (goto all)
-IF %menunr%==19 (goto twitter)
+IF %menunr%==11 (goto about)
+IF %menunr%==13 (goto twitter)
 IF %menunr%==14 (goto quit)
 :WHAT
 echo I guess that number wasn't for the program...
@@ -123,6 +113,10 @@ goto restart
 :twitter
 cls
 start http://twitter.com/motravl
+goto restart
+:gplus
+cls
+start http://gplus.to/motravl
 goto restart
 :about
 cls
@@ -304,7 +298,7 @@ IF EXIST "%~dp0place-APK-here-for-modding\unsigned%capp%" zipalign -f 4 "%~dp0pl
 \unsignedaligned%capp%"
 
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 DEL /Q "%~dp0place-APK-here-for-modding\signed%capp%"
@@ -318,7 +312,7 @@ echo Extracting APK
 IF EXIST "../projects/%capp%" (rmdir /S /Q "../projects/%capp%")
 7za x -o"../projects/%capp%" "../place-APK-here-for-modding/%capp%"
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 cd ..
@@ -336,7 +330,7 @@ echo Zipping APK
 cd other
 7za a -tzip "../place-APK-here-for-modding/unsigned%capp%" "../projects/%capp%/*" -mx%usrc%
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 
@@ -348,7 +342,7 @@ echo Zipping APK
 rmdir /S /Q "../out/META-INF"
 7za a -tzip "../place-APK-here-for-modding/unsigned%capp%" "../projects/%capp%/*" -mx%usrc%
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 
@@ -381,7 +375,7 @@ cd other
 echo Signing APK
 java -Xmx%heapy%m -jar signAPK.jar -w testkey.x509.pem testkey.pk8 ../place-APK-here-for-modding/unsigned%capp% ../place-APK-here-for-modding/signed%capp%
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 
@@ -394,7 +388,7 @@ adb wait-for-device
 echo Installing APK
 adb install -r place-APK-here-for-modding/signed%capp%
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 goto restart
@@ -405,14 +399,14 @@ echo Building APK
 IF EXIST "%~dp0place-APK-here-for-modding\unsigned%capp%" (del /Q "%~dp0place-APK-here-for-modding\unsigned%capp%")
 java -Xmx%heapy%m -jar APKtool.jar b "../projects/%capp%" "%~dp0place-APK-here-for-modding\unsigned%capp%"
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 goto restart
 )
 echo Signing APK
 java -Xmx%heapy%m -jar signAPK.jar -w testkey.x509.pem testkey.pk8 ../place-APK-here-for-modding/unsigned%capp% ../place-APK-here-for-modding/signed%capp%
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 DEL /Q "../place-APK-here-for-modding/unsigned%capp%"
@@ -422,18 +416,18 @@ adb wait-for-device
 echo Installing APK
 adb install -r place-APK-here-for-modding/signed%capp%
 if errorlevel 1 (
-echo "An Error Occured, Please Check The Log (option 16)"
+echo "An Error Occured"
 PAUSE
 )
 goto restart
 :errjava
 cls
-echo Java was not found, you will not be able to sign APKs or use APKtool
+echo Java was not found, install Java to use the programm
 PAUSE
 goto restart
 :erradb
 cls
-echo Adb was not found, you will not be able to manipulate the files on your phone
+echo Adb was not found, install ADB to modify APK's
 PAUSE
 goto restart
 :adbi
@@ -450,10 +444,6 @@ set /a count+=1
 goto :loop
 :endloop
 goto quit
-:logr
-cd other
-Start "Read The Log - Main script is still running, close this to return" signer 1
-goto restart
 :endab
 cd ..
 @echo Optimization complete for %~1
